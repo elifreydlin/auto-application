@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eli The Car Guy — Credit Application</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; background: #020712; color: #e2e8f0; line-height: 1.5; overflow-x: hidden; }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 0 16px 60px; }
+
+  /* Neon Ocean Stage */
+  .stage-container { position: relative; width: 100%; height: 320px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle at 50% 30%, #061329 0%, #020712 70%, #000308 100%); overflow: hidden; perspective: 1000px; border-bottom: 1px solid rgba(0, 242, 254, 0.25); user-select: none; }
+  .spotlight { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(600px circle at var(--light-x, 50%) var(--light-y, 30%), rgba(0, 242, 254, 0.15), transparent 80%); pointer-events: none; z-index: 1; }
+
+  .waves { position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; z-index: 2; pointer-events: none; }
+  .waves .w1 { animation: waveMove 10s linear infinite; }
+  .waves .w2 { animation: waveMove 16s linear infinite reverse; }
+  .waves .w3 { animation: waveMove 22s linear infinite; }
+  @keyframes waveMove { from { transform: translateX(0); } to { transform: translateX(-1440px); } }
+
+  .header-3d-wrapper { position: relative; z-index: 3; transform-style: preserve-3d; will-change: transform; text-align: center; cursor: grab; padding: 20px; }
+  .header-3d-wrapper:active { cursor: grabbing; }
+
+  .text-3d { font-family: 'Righteous', sans-serif; font-size: clamp(2.2rem, 8vw, 5.2rem); font-weight: 900; line-height: 1.1; letter-spacing: 2px; white-space: nowrap; text-transform: uppercase; display: inline-block; color: #00f2fe; }
+
+  .subtitle-3d { font-size: clamp(.95rem, 3vw, 1.35rem); font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-top: 12px; color: #4facfe; text-shadow: 0 0 12px rgba(0, 242, 254, 0.6); transform: translateZ(40px); }
+
+  .lang-switch { margin-top: 20px; transform: translateZ(40px); }
+  .lang-switch button { background: rgba(2, 7, 18, .7); border: 1px solid rgba(0, 242, 254, .4); color: #7dd3fc; padding: 6px 14px; margin: 0 4px; border-radius: 20px; cursor: pointer; font-size: .9rem; font-weight: 600; transition: all .2s; }
+  .lang-switch button:hover { border-color: #00f2fe; color: #ffffff; }
+  .lang-switch button.active { background: linear-gradient(135deg, #00f2fe, #4facfe); color: #020712; border-color: #00f2fe; font-weight: 800; }
+
+  /* Form */
+  section { background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(0, 242, 254, 0.18); backdrop-filter: blur(12px); border-radius: 14px; padding: 20px; margin-top: 18px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); }
+  h2 { font-size: 1.02rem; color: #00f2fe; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid rgba(0, 242, 254, 0.4); padding-bottom: 8px; margin-bottom: 14px; }
+  label { display: block; font-size: .88rem; font-weight: 600; margin: 12px 0 4px; color: #94a3b8; }
+  label .opt { font-weight: 400; color: #64748b; font-size: .8rem; }
+  input[type=text], input[type=tel], input[type=email], input[type=number], input[type=date], select, textarea { width: 100%; padding: 11px 12px; background: #091322; border: 1px solid #1e293b; border-radius: 8px; color: #e2e8f0; font-size: 1rem; outline: none; transition: border .2s; }
+  input:focus, select:focus { border-color: #00f2fe; background: #0b1a2e; }
+  select option { background: #091322; color: #e2e8f0; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 130px; }
+  .inline { display: flex; align-items: center; gap: 8px; }
+  .inline input[type=number] { flex: 1; }
+  .inline .per { white-space: nowrap; font-size: .9rem; color: #94a3b8; }
+  .radios { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 4px; }
+  .radios label { display: flex; align-items: center; gap: 6px; font-weight: 400; margin: 0; color: #cbd5e1; }
+  input[type=radio], input[type=checkbox] { width: 18px; height: 18px; accent-color: #00f2fe; }
+  .note { font-size: .8rem; color: #64748b; margin-top: 2px; }
+  .hidden { display: none !important; }
+  button.submit { width: 100%; margin-top: 22px; padding: 16px; background: linear-gradient(135deg, #00f2fe, #4facfe); color: #020712; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 242, 254, .35); transition: transform .1s, box-shadow .2s; }
+  button.submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0, 242, 254, .5); }
+  button.submit:disabled { opacity: .6; transform: none; }
+  #success { background: linear-gradient(135deg, #00f2fe, #4facfe); border: 1px solid #00f2fe; color: #020712; font-weight: 700; border-radius: 12px; padding: 22px; margin-top: 18px; text-align: center; font-size: 1.05rem; }
+  .req { color: #00f2fe; }
+  footer { text-align: center; color: #64748b; font-size: .78rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+
+<div class="stage-container" id="stage">
+  <div class="spotlight" id="spotlight"></div>
+  <div class="header-3d-wrapper" id="wrapper">
+    <div class="text-3d" id="text3D">Eli The Car Guy</div>
+    <div class="subtitle-3d" id="subtitle3D" data-en="Auto Credit Application" data-ru="Заявка на автокредит" data-es="Solicitud de crédito para auto">Auto Credit Application</div>
+    <div class="lang-switch">
+      <button type="button" id="btn-en" class="active" onclick="setLang('en')">🇺🇸 EN</button>
+      <button type="button" id="btn-ru" onclick="setLang('ru')">🇷🇺 РУС</button>
+      <button type="button" id="btn-es" onclick="setLang('es')">🇪🇸 ES</button>
+    </div>
+  </div>
+  <svg class="waves" viewBox="0 0 2880 140" preserveAspectRatio="none" aria-hidden="true">
+    <g class="w3" fill="#00f2fe" opacity="0.08">
+      <path d="M0,40 C240,70 480,10 720,40 C960,70 1200,10 1440,40 C1680,70 1920,10 2160,40 C2400,70 2640,10 2880,40 L2880,140 L0,140 Z"></path>
+    </g>
+    <g class="w2" fill="#4facfe" opacity="0.15">
+      <path d="M0,70 C240,100 480,40 720,70 C960,100 1200,40 1440,70 C1680,100 1920,40 2160,70 C2400,100 2640,40 2880,70 L2880,140 L0,140 Z"></path>
+    </g>
+    <g class="w1" fill="#020712" opacity="0.95">
+      <path d="M0,100 C240,120 480,80 720,100 C960,120 1200,80 1440,100 C1680,120 1920,80 2160,100 C2400,120 2640,80 2880,100 L2880,140 L0,140 Z"></path>
+    </g>
+  </svg>
+</div>
+
+<div class="wrap">
+
+<form id="appForm" novalidate="false">
+
+  <input type="hidden" name="access_key" value="f58ac341-94e3-4801-9eb5-89f9721a510e">
+  <input type="hidden" name="subject" value="New Car Loan Application - EliTheCarGuy">
+  <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off">
+
+  <!-- SECTION 1: VEHICLE & DEAL -->
+  <section>
+    <h2 data-en="Vehicle &amp; Deal" data-ru="Автомобиль и условия" data-es="Vehículo y condiciones">Vehicle &amp; Deal</h2>
+
+    <label data-en="New or used? <span class='req'>*</span>" data-ru="Новый или подержанный? <span class='req'>*</span>" data-es="¿Nuevo o usado? <span class='req'>*</span>">New or used? <span class="req">*</span></label>
+    <div class="radios">
+      <label><input type="radio" name="new_or_used" value="New" required> <span data-en="New" data-ru="Новый" data-es="Nuevo">New</span></label>
+      <label><input type="radio" name="new_or_used" value="Used" required> <span data-en="Used" data-ru="Подержанный" data-es="Usado">Used</span></label>
+    </div>
+
+    <label data-en="Purchase or lease? <span class='req'>*</span>" data-ru="Покупка или лизинг? <span class='req'>*</span>" data-es="¿Compra o leasing? <span class='req'>*</span>">Purchase or lease? <span class="req">*</span></label>
+    <div class="radios">
+      <label><input type="radio" name="purchase_or_lease" value="Purchase" required> <span data-en="Purchase" data-ru="Покупка" data-es="Compra">Purchase</span></label>
+      <label><input type="radio" name="purchase_or_lease" value="Lease" required> <span data-en="Lease" data-ru="Лизинг" data-es="Leasing">Lease</span></label>
+    </div>
+
+    <div class="row">
+      <div><label data-en="Year" data-ru="Год" data-es="Año">Year</label><input type="number" name="vehicle_year" min="1950" max="2027"></div>
+      <div><label data-en="Make" data-ru="Марка" data-es="Marca">Make</label><input type="text" name="vehicle_make"></div>
+      <div><label data-en="Model" data-ru="Модель" data-es="Modelo">Model</label><input type="text" name="vehicle_model"></div>
+    </div>
+    <p class="note" data-en="Leave blank if you're not sure yet." data-ru="Оставьте пустым, если ещё не определились." data-es="Déjelo en blanco si aún no lo sabe.">Leave blank if you're not sure yet.</p>
+
+    <label data-en="Desired monthly payment <span class='req'>*</span>" data-ru="Желаемый платёж в месяц <span class='req'>*</span>" data-es="Pago mensual deseado <span class='req'>*</span>">Desired monthly payment <span class="req">*</span></label>
+    <div class="inline">
+      <span class="per">$</span><input type="number" name="desired_monthly_payment" min="0" required>
+      <span class="per" data-en="/ month" data-ru="в месяц" data-es="por mes">/ month</span>
+    </div>
+
+    <label data-en="Do you have a trade-in? <span class='req'>*</span>" data-ru="Есть ли автомобиль для trade-in? <span class='req'>*</span>" data-es="¿Tiene un vehículo para trade-in? <span class='req'>*</span>">Do you have a trade-in? <span class="req">*</span></label>
+    <div class="radios">
+      <label><input type="radio" name="trade_in" value="Yes" required onchange="toggleTrade(true)"> <span data-en="Yes" data-ru="Да" data-es="Sí">Yes</span></label>
+      <label><input type="radio" name="trade_in" value="No" required onchange="toggleTrade(false)"> <span data-en="No" data-ru="Нет" data-es="No">No</span></label>
+    </div>
+
+    <div id="tradeDetails" class="hidden">
+      <label style="margin-top:16px;" data-en="Trade-in vehicle" data-ru="Автомобиль для trade-in" data-es="Vehículo de trade-in">Trade-in vehicle</label>
+      <div class="row">
+        <div><label data-en="Year" data-ru="Год" data-es="Año">Year</label><input type="number" name="trade_year" min="1950" max="2027"></div>
+        <div><label data-en="Make" data-ru="Марка" data-es="Marca">Make</label><input type="text" name="trade_make"></div>
+        <div><label data-en="Model" data-ru="Модель" data-es="Modelo">Model</label><input type="text" name="trade_model"></div>
+      </div>
+      <div class="row" style="margin-top:10px;">
+        <div><label data-en="Mileage" data-ru="Пробег" data-es="Millaje">Mileage</label><input type="number" name="trade_mileage" min="0"></div>
+        <div><label>VIN</label><input type="text" name="trade_vin" maxlength="17"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: APPLICANT -->
+  <section>
+    <h2 data-en="Applicant Information" data-ru="Информация о заявителе" data-es="Información del solicitante">Applicant Information</h2>
+
+    <label data-en="Full name <span class='opt'>(as it appears on your driver's license)</span> <span class='req'>*</span>" data-ru="Имя полностью <span class='opt'>(как в водительском удостоверении)</span> <span class='req'>*</span>" data-es="Nombre completo <span class='opt'>(tal como aparece en la licencia)</span> <span class='req'>*</span>">Full name <span class="opt">(as it appears on your driver's license)</span> <span class="req">*</span></label>
+    <input type="text" name="full_name" required>
+
+    <div class="row">
+      <div>
+        <label data-en="Date of birth <span class='req'>*</span>" data-ru="Дата рождения <span class='req'>*</span>" data-es="Fecha de nacimiento <span class='req'>*</span>">Date of birth <span class="req">*</span></label>
+        <input type="date" name="dob" required>
+      </div>
+      <div>
+        <label data-en="Last 4 digits of SSN <span class='req'>*</span>" data-ru="Последние 4 цифры SSN <span class='req'>*</span>" data-es="Últimos 4 dígitos del SSN <span class='req'>*</span>">Last 4 digits of SSN <span class="req">*</span></label>
+        <input type="text" name="ssn_last4" inputmode="numeric" pattern="\d{4}" maxlength="4" required placeholder="1234">
+      </div>
+    </div>
+
+    <div class="row">
+      <div style="flex:2;">
+        <label data-en="Driver's license number <span class='req'>*</span>" data-ru="Номер водительского удостоверения <span class='req'>*</span>" data-es="Número de licencia de conducir <span class='req'>*</span>">Driver's license number <span class="req">*</span></label>
+        <input type="text" name="dl_number" required>
+      </div>
+      <div>
+        <label data-en="State <span class='req'>*</span>" data-ru="Штат <span class='req'>*</span>" data-es="Estado <span class='req'>*</span>">State <span class="req">*</span></label>
+        <select name="dl_state" class="state-select" required><option value=""></option></select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label data-en="Cell phone <span class='req'>*</span>" data-ru="Мобильный телефон <span class='req'>*</span>" data-es="Teléfono celular <span class='req'>*</span>">Cell phone <span class="req">*</span></label>
+        <input type="tel" name="cell_phone" required>
+      </div>
+      <div>
+        <label data-en="Email <span class='req'>*</span>" data-ru="Электронная почта <span class='req'>*</span>" data-es="Correo electrónico <span class='req'>*</span>">Email <span class="req">*</span></label>
+        <input type="email" name="email" required>
+      </div>
+      <div>
+        <label data-en="# of dependents <span class='req'>*</span>" data-ru="Кол-во иждивенцев <span class='req'>*</span>" data-es="# de dependientes <span class='req'>*</span>"># of dependents <span class="req">*</span></label>
+        <input type="number" name="dependents" min="0" required>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: RESIDENCE -->
+  <section>
+    <h2 data-en="Residence" data-ru="Адрес проживания" data-es="Residencia">Residence</h2>
+
+    <label data-en="Street address <span class='req'>*</span>" data-ru="Улица, номер дома <span class='req'>*</span>" data-es="Dirección <span class='req'>*</span>">Street address <span class="req">*</span></label>
+    <input type="text" name="address" required>
+
+    <div class="row">
+      <div style="flex:2;">
+        <label data-en="City <span class='req'>*</span>" data-ru="Город <span class='req'>*</span>" data-es="Ciudad <span class='req'>*</span>">City <span class="req">*</span></label>
+        <input type="text" name="city" required>
+      </div>
+      <div>
+        <label data-en="State <span class='req'>*</span>" data-ru="Штат <span class='req'>*</span>" data-es="Estado <span class='req'>*</span>">State <span class="req">*</span></label>
+        <select name="res_state" class="state-select" required><option value=""></option></select>
+      </div>
+      <div>
+        <label data-en="ZIP <span class='req'>*</span>" data-ru="Индекс <span class='req'>*</span>" data-es="Código postal <span class='req'>*</span>">ZIP <span class="req">*</span></label>
+        <input type="text" name="zip" inputmode="numeric" pattern="\d{5}" maxlength="5" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label data-en="Monthly housing payment <span class='req'>*</span>" data-ru="Ежемесячный платёж за жильё <span class='req'>*</span>" data-es="Pago mensual de vivienda <span class='req'>*</span>">Monthly housing payment <span class="req">*</span></label>
+        <div class="inline"><span class="per">$</span><input type="number" name="housing_payment" min="0" required></div>
+      </div>
+      <div>
+        <label data-en="Do you rent or own? <span class='req'>*</span>" data-ru="Снимаете или собственное? <span class='req'>*</span>" data-es="¿Alquila o es propietario? <span class='req'>*</span>">Do you rent or own? <span class="req">*</span></label>
+        <select name="rent_or_own" required>
+          <option value=""></option>
+          <option value="Rent" data-en="Rent" data-ru="Снимаю" data-es="Alquilo">Rent</option>
+          <option value="Own" data-en="Own" data-ru="В собственности" data-es="Propiedad">Own</option>
+        </select>
+      </div>
+    </div>
+
+    <label data-en="How long at this address? <span class='req'>*</span>" data-ru="Как давно проживаете по этому адресу? <span class='req'>*</span>" data-es="¿Cuánto tiempo lleva en esta dirección? <span class='req'>*</span>">How long at this address? <span class="req">*</span></label>
+    <div class="row">
+      <div class="inline"><input type="number" name="addr_years" min="0" required> <span class="per" data-en="years" data-ru="лет" data-es="años">years</span></div>
+      <div class="inline"><input type="number" name="addr_months" min="0" max="11" required> <span class="per" data-en="months" data-ru="мес." data-es="meses">months</span></div>
+    </div>
+
+    <label data-en="Previous address <span class='opt'>(if less than 2 years at current)</span>" data-ru="Предыдущий адрес <span class='opt'>(если по текущему менее 2 лет)</span>" data-es="Dirección anterior <span class='opt'>(si lleva menos de 2 años)</span>">Previous address <span class="opt">(if less than 2 years at current)</span></label>
+    <input type="text" name="previous_address">
+  </section>
+
+  <!-- SECTION 4: EMPLOYMENT & INCOME -->
+  <section>
+    <h2 data-en="Employment &amp; Income" data-ru="Работа и доход" data-es="Empleo e ingresos">Employment &amp; Income</h2>
+
+    <div class="row">
+      <div style="flex:2;">
+        <label data-en="Current employer <span class='req'>*</span>" data-ru="Текущий работодатель <span class='req'>*</span>" data-es="Empleador actual <span class='req'>*</span>">Current employer <span class="req">*</span></label>
+        <input type="text" name="employer" required>
+      </div>
+      <div style="flex:2;">
+        <label data-en="Employer address <span class='req'>*</span>" data-ru="Адрес работодателя <span class='req'>*</span>" data-es="Dirección del empleador <span class='req'>*</span>">Employer address <span class="req">*</span></label>
+        <input type="text" name="employer_address" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label data-en="Occupation / job title <span class='req'>*</span>" data-ru="Должность <span class='req'>*</span>" data-es="Ocupación / cargo <span class='req'>*</span>">Occupation / job title <span class="req">*</span></label>
+        <input type="text" name="occupation" required>
+      </div>
+      <div>
+        <label data-en="Work phone" data-ru="Рабочий телефон" data-es="Teléfono del trabajo">Work phone</label>
+        <input type="tel" name="work_phone">
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label data-en="Income type <span class='req'>*</span>" data-ru="Тип дохода <span class='req'>*</span>" data-es="Tipo de ingreso <span class='req'>*</span>">Income type <span class="req">*</span></label>
+        <select name="income_type" required>
+          <option value=""></option>
+          <option value="W-2">W-2</option>
+          <option value="1099">1099</option>
+          <option value="Self-employed" data-en="Self-employed" data-ru="Самозанятый / ИП" data-es="Por cuenta propia">Self-employed</option>
+        </select>
+      </div>
+      <div>
+        <label data-en="Gross monthly income <span class='req'>*</span>" data-ru="Валовой доход в месяц <span class='req'>*</span>" data-es="Ingreso mensual bruto <span class='req'>*</span>">Gross monthly income <span class="req">*</span></label>
+        <div class="inline"><span class="per">$</span><input type="number" name="gross_income" min="0" required></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label data-en="Other monthly income" data-ru="Прочий доход в месяц" data-es="Otros ingresos mensuales">Other monthly income</label>
+        <div class="inline"><span class="per">$</span><input type="number" name="other_income" min="0"></div>
+      </div>
+      <div>
+        <label data-en="Source" data-ru="Источник" data-es="Fuente">Source</label>
+        <input type="text" name="other_income_source">
+      </div>
+    </div>
+
+    <label data-en="Previous employer <span class='opt'>(if less than 2 years at current job)</span>" data-ru="Предыдущий работодатель <span class='opt'>(если на текущем месте менее 2 лет)</span>" data-es="Empleador anterior <span class='opt'>(si lleva menos de 2 años en el empleo actual)</span>">Previous employer <span class="opt">(if less than 2 years at current job)</span></label>
+    <input type="text" name="previous_employer">
+  </section>
+
+  <!-- SECTION 5: AGREEMENT -->
+  <section>
+    <h2 data-en="Agreement" data-ru="Подтверждение" data-es="Acuerdo">Agreement</h2>
+    <label style="display:flex; align-items:flex-start; gap:10px; font-weight:400; color:#cbd5e1;">
+      <input type="checkbox" name="agreement" required style="margin-top:3px;">
+      <span data-en="I certify that all information provided is complete and accurate. I authorize investigation of my credit and employment history. <span class='req'>*</span>"
+            data-ru="Я подтверждаю, что вся предоставленная информация является полной и достоверной. Я разрешаю проверку моей кредитной истории и сведений о работе. <span class='req'>*</span>"
+            data-es="Certifico que toda la información proporcionada es completa y exacta. Autorizo la investigación de mi crédito y historial de empleo. <span class='req'>*</span>">I certify that all information provided is complete and accurate. I authorize investigation of my credit and employment history. <span class="req">*</span></span>
+    </label>
+    <p class="note" style="margin-top:10px;">
+      <span data-en="Date:" data-ru="Дата:" data-es="Fecha:">Date:</span> <span id="todayDate"></span>
+    </p>
+  </section>
+
+  <button type="submit" class="submit" id="submitBtn" data-en="Submit Application" data-ru="Отправить заявку" data-es="Enviar solicitud">Submit Application</button>
+
+</form>
+
+<div id="success" class="hidden"></div>
+
+<footer>EliTheCarGuy &middot; <span data-en="Your information is sent securely (HTTPS) and used only to evaluate this application." data-ru="Ваши данные передаются по защищённому соединению (HTTPS) и используются только для рассмотрения заявки." data-es="Su información se envía de forma segura (HTTPS) y se usa solo para evaluar esta solicitud.">Your information is sent securely (HTTPS) and used only to evaluate this application.</span></footer>
+
+</div>
+
+<script>
+// --- NEON 3D HEADER: tilt physics, spotlight, extruded shadows ---
+var stage = document.getElementById('stage');
+var spotlight = document.getElementById('spotlight');
+var wrapper = document.getElementById('wrapper');
+var text3D = document.getElementById('text3D');
+
+var targetRotX = 0, targetRotY = 0;
+var currentRotX = 0, currentRotY = 0;
+var isHovered = false;
+
+var DEPTH = 14;
+var TILT = 1.2;
+var LAYER1 = '#00c3ff';
+var LAYER2 = '#0072ff';
+var GLOW = 'rgba(0, 242, 254, 0.7)';
+
+function handleMove(px, py) {
+  var rect = stage.getBoundingClientRect();
+  var cx = rect.left + rect.width / 2;
+  var cy = rect.top + rect.height / 2;
+  var dx = (px - cx) / (rect.width / 2);
+  var dy = (py - cy) / (rect.height / 2);
+  targetRotX = -dy * 25 * TILT;
+  targetRotY = dx * 30 * TILT;
+  spotlight.style.setProperty('--light-x', (px - rect.left) + 'px');
+  spotlight.style.setProperty('--light-y', (py - rect.top) + 'px');
+}
+
+stage.addEventListener('mousemove', function(e) { isHovered = true; handleMove(e.clientX, e.clientY); });
+stage.addEventListener('mouseleave', function() { isHovered = false; targetRotX = 0; targetRotY = 0; });
+stage.addEventListener('touchmove', function(e) {
+  if (e.touches.length > 0) { isHovered = true; handleMove(e.touches[0].clientX, e.touches[0].clientY); }
+}, { passive: true });
+stage.addEventListener('touchend', function() { isHovered = false; targetRotX = 0; targetRotY = 0; });
+
+function render() {
+  currentRotX += (targetRotX - currentRotX) * 0.08;
+  currentRotY += (targetRotY - currentRotY) * 0.08;
+
+  var finalRotX = currentRotX, finalRotY = currentRotY;
+  if (!isHovered) {
+    var t = Date.now() * 0.002;
+    finalRotX += Math.sin(t) * 8;
+    finalRotY += Math.cos(t * 0.8) * 12;
+  }
+
+  wrapper.style.transform = 'rotateX(' + finalRotX + 'deg) rotateY(' + finalRotY + 'deg) translateZ(20px)';
+
+  var offX = -finalRotY * 0.45;
+  var offY = finalRotX * 0.45 + 2;
+  var shadowStr = '';
+  for (var i = 1; i <= DEPTH; i++) {
+    var ratio = i / DEPTH;
+    var sx = (offX * ratio).toFixed(1);
+    var sy = (i + offY * ratio).toFixed(1);
+    var col = ratio < 0.5 ? LAYER1 : LAYER2;
+    shadowStr += sx + 'px ' + sy + 'px 0 ' + col + ', ';
+  }
+  shadowStr += (offX * 1.5).toFixed(1) + 'px ' + (DEPTH + offY * 1.5).toFixed(1) + 'px 30px ' + GLOW;
+  text3D.style.textShadow = shadowStr;
+
+  requestAnimationFrame(render);
+}
+render();
+
+// --- APPLICATION FORM LOGIC ---
+var STATES = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+
+document.querySelectorAll('.state-select').forEach(function(sel){
+  STATES.forEach(function(s){
+    var o = document.createElement('option');
+    o.value = s; o.textContent = s;
+    sel.appendChild(o);
+  });
+});
+
+document.getElementById('todayDate').textContent = new Date().toLocaleDateString();
+
+function toggleTrade(show){
+  document.getElementById('tradeDetails').classList.toggle('hidden', !show);
+}
+
+function setLang(lang){
+  localStorage.setItem('lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-' + lang + ']').forEach(function(el){
+    el.innerHTML = el.getAttribute('data-' + lang);
+  });
+  ['en','ru','es'].forEach(function(l){
+    document.getElementById('btn-' + l).classList.toggle('active', l === lang);
+  });
+  showSuccess(false);
+}
+var savedLang = localStorage.getItem('lang') || 'en';
+setLang(savedLang);
+
+var SUCCESS = {
+  en: "Application submitted! We will contact you shortly.",
+  ru: "Заявка отправлена! Мы свяжемся с вами в ближайшее время.",
+  es: "¡Solicitud enviada! Nos pondremos en contacto con usted pronto."
+};
+var SENDING = { en: "Sending...", ru: "Отправка...", es: "Enviando..." };
+var ERROR = {
+  en: "Something went wrong. Please try again or call us.",
+  ru: "Что-то пошло не так. Попробуйте ещё раз или позвоните нам.",
+  es: "Algo salió mal. Intente de nuevo o llámenos."
+};
+
+function showSuccess(ok, isError){
+  var box = document.getElementById('success');
+  if(!ok){ box.classList.add('hidden'); return; }
+  var lang = localStorage.getItem('lang') || 'en';
+  box.textContent = isError ? ERROR[lang] : SUCCESS[lang];
+  box.style.background = isError ? '#450a0a' : 'linear-gradient(135deg, #00f2fe, #4facfe)';
+  box.style.borderColor = isError ? '#ef4444' : '#00f2fe';
+  box.style.color = isError ? '#fecaca' : '#020712';
+  box.classList.remove('hidden');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+document.getElementById('appForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  if(!this.reportValidity()) return;
+  var btn = document.getElementById('submitBtn');
+  var lang = localStorage.getItem('lang') || 'en';
+  btn.disabled = true;
+  var originalText = btn.textContent;
+  btn.textContent = SENDING[lang];
+
+  var data = new FormData(this);
+  data.append('replyto', this.email.value);
+
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    body: data
+  }).then(function(res){ return res.json(); }).then(function(json){
+    btn.disabled = false;
+    btn.textContent = originalText;
+    if(json.success){
+      showSuccess(true, false);
+      document.getElementById('appForm').reset();
+      toggleTrade(false);
+    } else {
+      showSuccess(true, true);
+    }
+  }).catch(function(){
+    btn.disabled = false;
+    btn.textContent = originalText;
+    showSuccess(true, true);
+  });
+});
+</script>
+</body>
+</html>
